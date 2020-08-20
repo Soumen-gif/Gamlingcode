@@ -1,29 +1,39 @@
 
-echo "Welcome to gamling code"
-#!/bin/bash -x
-
-day=0
-Stakes=100
+stakes=100
 bet=1
-winTarget=150
+winTarget=100
 loseTarget=50
-    doingBet(){
+doingBet(){
         if [ $((RANDOM % 2)) -eq 1 ]
         then
-                echo "he Won the match"
-                stakes=$(($stakes + $bet))
+                Stakes=$(($stakes + $bet))
         else
-                echo "he lose the game"
                 stakes=$(($stakes - $bet))
         fi
-        }
+         }
 
-noOfDay(){
+day(){
         stakes=100
-        while [ $stakes -lt $winTarget ] && [ $stakes -gt $loseTraget ]
+        while [ $stakes -lt $winTarget ] && [ $stakes -gt $loseTarget ]
         do
                 doingBet
         done
-        echo "Your final stake = $stakes"
-}
-noOfDay
+	    totalGain=$(($stakes-100))
+     }
+
+noOfDays(){
+      for ((i=1;i<=20;i++))
+        do
+	       day
+	      echo "Day:$i	    stakes:$stakes"
+       	totalAmount=$(($totalAmount+$totalGain))
+        done
+       if [ $totalAmount -gt 0 ]
+       	then
+		     echo "The amount he gains: $totalAmount"
+       else
+                echo "The amount he lost: $totalAmount"
+        fi
+          }
+noOfDays
+
