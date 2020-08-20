@@ -1,16 +1,18 @@
-
+#!/bin/bash -x
 stakes=100
 bet=1
-winTarget=100
+winTarget=150
 loseTarget=50
+winday=0
+loseday=0
 doingBet(){
         if [ $((RANDOM % 2)) -eq 1 ]
         then
-                Stakes=$(($stakes + $bet))
+                stakes=$(($stakes + $bet))
         else
                 stakes=$(($stakes - $bet))
         fi
-         }
+          }
 
 day(){
         stakes=100
@@ -18,22 +20,31 @@ day(){
         do
                 doingBet
         done
-	    totalGain=$(($stakes-100))
-     }
+	actualGain=$(($stakes-100))
+}
 
-noOfDays(){
-      for ((i=1;i<=20;i++))
-        do
-	       day
-	      echo "Day:$i	    stakes:$stakes"
-       	totalAmount=$(($totalAmount+$totalGain))
-        done
-       if [ $totalAmount -gt 0 ]
-       	then
-		     echo "The amount he gains: $totalAmount"
-       else
-                echo "The amount he lost: $totalAmount"
+total(){
+for ((i=1;i<=30;i++))
+do
+	day
+	echo "Based on everyday Day:$i	stakes:$stakes"
+	if [ $stakes -eq 150 ]
+	then 
+		win=$(($win + 50))
+		winDay=$(($winDay + 1))
+	else
+		lose=$(($lose + 50))
+		loseDay=$(($loseDay + 1))
+	fi
+	totalAmount=$(($totalAmount+$actualGain))
+done
+echo "Total number of days won in month is $winDay and amount gained is $win"
+echo "Total number of days loose in month is $loseDay and amount loss is $lose"
+if [ $totalAmount -gt 0 ]
+	then
+		echo "Total amount won in month: $totalAmount"
+        else
+                echo "Total amount lost in month: $totalAmount"
         fi
-          }
-noOfDays
-
+}
+total
