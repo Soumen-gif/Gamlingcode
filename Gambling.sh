@@ -1,7 +1,7 @@
 
 stakes=100
 bet=1
-winTarget=100
+winTarget=150
 loseTarget=50
 doingBet(){
         if [ $((RANDOM % 2)) -eq 1 ]
