@@ -1,66 +1,79 @@
 #!/bin/bash -x
-
-stakes=100
+WON=0
+Lose=0
+STAKE=100
 bet=1
 winTarget=150
-loseTarget=100
-
-doingBet(){
+loseTarget=50
+winDay=0
+loseDay=0
+beting(){
         if [ $((RANDOM % 2)) -eq 1 ]
         then
-                stakes=$(($stakes + $bet))
+                STAKE=$(($STAKE + $bet))
         else
-                stakes=$(($stakes - $bet))
+                STAKE=$(($STAKE - $bet))
         fi
 }
 
 day(){
-        stakes=100
-        while [ $stakes -lt $winTarget ] && [ $stakes -gt $loseTarget ]
+        STAKE=100
+        while [ $STAKE -lt $winTarget ] && [ $STAKE -gt $loseTarget ]
         do
-                doingBet
+                beting
         done
-	actualGain=$(($stakes-100))
+	actualGain=$(($STAKE-100))
 }
 a=0
-totalNoOfDays(){
+total(){
 for ((i=1;i<=30;i++))
 do
 	day
-	echo "Day:$i	stakes:$stakes"
-	if [ $stakes -eq 150 ]
+	echo "based on the Day:$i.......	days wise His Stake....$STAKE"
+	if [ $STAKE -eq 150 ]
 	then 
-		win=$(($win + 50))
+		WON=$(($WON + 50))
 		winDay=$(($winDay + 1))
 	else
-		lose=$(($lose + 50))
+		LOSE=$(($LOSE + 50))
 		loseDay=$(($loseDay + 1))
 	fi
 	totalAmount=$(($totalAmount+$actualGain))
 	daydict[$i]=$totalAmount
-	ar[$a]=$totalAmount
+	arr[$a]=$totalAmount
 	a=$(($a + 1))
 done
 
 for ((i=1;i<=30;i++))
 do
-	if ((daydict[i] == ar[$a-1]))
+	if ((daydict[i] == arr[$a-1]))
 	then
 		echo "Luckiest day of gambler was Day $i"
 	fi
-	if ((daydict[i] == ar[0]))
+	if ((daydict[i] == arr[0]))
         then
                 echo "Unluckiest day of gambler was Day $i"
         fi
 done
 
-echo "Total number of days won in month is $winDay and amount gained is $win"
-echo "Total number of days loose in month is $loseDay and amount loss is $lose"
+echo "In a month he won $winDay days"
+echo "amount gained is $WON"
+echo "In a month he lost $loseDay days"
+echo " amount loss is $LOSE"
 if [ $totalAmount -gt 0 ]
 	then
-		echo "Total amount won in month: $totalAmount"
+		echo "Amount won in a montrh.....$totalAmount"
         else
-                echo "Total amount lost in month: $totalAmount"
+                echo "amount lost.......$totalAmount"
         fi
 }
-totalNoOfDays
+total
+if [ $totalAmount -gt 0 ]
+then
+	echo "would u like to play for next month y/n"
+        read data
+	if (( $data == 'y'))
+	then
+		total
+	fi
+fi
